@@ -1868,12 +1868,10 @@ SDKDBBitcodeReader::Implementation::getOffsetForLibrary(Triple &target,
   if (auto err = materializeLibraryTable())
     return std::move(err);
 
-  for (auto &entry : dylibTable) {
-    if (target != Triple(entry.getKey()))
-      continue;
-
-    auto dylib = entry.getValue()->find(path);
-    if (dylib != entry.getValue()->end())
+  auto it = dylibTable.find(target.str());
+  if (it != dylibTable.end()) {
+    auto dylib = it->getValue()->find(path);
+    if (dylib != it->getValue()->end())
       return *dylib;
 
     return 0;
