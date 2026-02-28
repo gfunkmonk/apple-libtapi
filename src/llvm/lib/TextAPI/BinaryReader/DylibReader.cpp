@@ -33,13 +33,12 @@ using namespace llvm::MachO::DylibReader;
 using TripleVec = std::vector<Triple>;
 static typename TripleVec::iterator emplace(TripleVec &Container, Triple &&T) {
   auto I = partition_point(Container, [=](const Triple &CT) {
-    return std::forward_as_tuple(CT.getArch(), CT.getArchName(), CT.getOS(),
+    return std::forward_as_tuple(CT.getArch(), CT.getOS(),
                                  CT.getEnvironment()) <
-           std::forward_as_tuple(T.getArch(), T.getArchName(), T.getOS(),
-                                 T.getEnvironment());
+           std::forward_as_tuple(T.getArch(), T.getOS(), T.getEnvironment());
   });
 
-  if (I != Container.end() && I->getArchName() == T.getArchName() && *I == T)
+  if (I != Container.end() && *I == T)
     return I;
   return Container.emplace(I, T);
 }
