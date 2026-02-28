@@ -179,6 +179,13 @@ static Architecture getArchForCPU(cpu_type_t cpuType, cpu_subtype_t cpuSubType,
 
   if (enforceCpuSubType)
     return AK_unknown;
+
+  // x86_64h is a superset of x86_64; fall back to x86_64 when x86_64h is not
+  // explicitly present in the file (e.g. macOS 15 SDK dropped x86_64h from
+  // some TBD files that previously listed it).
+  if (arch == AK_x86_64h && archs.has(AK_x86_64))
+    return AK_x86_64;
+
   return arch;
 }
 

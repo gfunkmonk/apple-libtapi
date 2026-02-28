@@ -206,8 +206,9 @@ public:
 
     for (auto &result : *results) {
       const auto &target = result.second->getTriple();
-      if (std::find(triples.begin(), triples.end(), target) ==
-          std::end(triples))
+      if (llvm::none_of(triples, [&target](const Triple &t) {
+            return SDKDB::areCompatibleTargets(t, target);
+          }))
         triples.push_back(target);
 
       // Update all interfaces to public if configuration suggests.
