@@ -423,8 +423,10 @@ Error SDKDBBitcodeReader::Implementation::readTripleFromSDKDB(
     switch (kind) {
     case sdkdb_block::TARGET_TRIPLE: {
       Triple triple(tripleStr);
-      assert(llvm::find(triples, triple) == triples.end() &&
-             "Triples are not unqiue in SDKDB");
+      assert(llvm::find_if(triples, [&](const Triple &T) {
+               return T.str() == triple.str();
+             }) == triples.end() &&
+             "Triples are not unique in SDKDB");
       triples.push_back(triple);
       break;
     }
@@ -1296,7 +1298,9 @@ Error SDKDBBitcodeReader::Implementation::readSDKDBBlock(
       case sdkdb_block::TARGET_TRIPLE: {
         Triple triple(tripleStr);
         if (option.targets.size() &&
-            llvm::find(option.targets, triple) == option.targets.end())
+            llvm::find_if(option.targets, [&](const Triple &T) {
+              return T.str() == triple.str();
+            }) == option.targets.end())
           skipBlock = true;
         else
           db = &builder.getSDKDBForTarget(triple);
@@ -1609,7 +1613,7 @@ SDKDBBitcodeReader::Implementation::getOffsetForLibrary(Triple &target,
     return std::move(err);
 
   for (auto &entry : dylibTable) {
-    if (target != Triple(entry.getKey()))
+    if (target.str() != entry.getKey())
       continue;
 
     auto dylib = entry.getValue()->find(path);

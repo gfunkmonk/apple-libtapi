@@ -669,7 +669,10 @@ std::vector<Triple> constructTripleFromMachO(MachOObjectFile *object) {
   sort(triples, [](const Triple &lhs, const Triple &rhs) {
     return lhs.str() < rhs.str();
   });
-  auto last = std::unique(triples.begin(), triples.end());
+  auto last = std::unique(triples.begin(), triples.end(),
+                          [](const Triple &lhs, const Triple &rhs) {
+                            return lhs.str() == rhs.str();
+                          });
   triples.erase(last, triples.end());
 
   return triples;
