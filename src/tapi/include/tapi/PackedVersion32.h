@@ -14,6 +14,7 @@
 #ifndef TAPI_PACKED_VERSION_32_H
 #define TAPI_PACKED_VERSION_32_H
 
+#include <stdint.h>
 #include <tapi/Defines.h>
 
 ///

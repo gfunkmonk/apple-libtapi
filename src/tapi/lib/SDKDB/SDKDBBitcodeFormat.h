@@ -15,10 +15,9 @@
 
 #include "tapi/Defines.h"
 #include "llvm/Bitstream/BitCodes.h"
+#include <cstdint>
 
 TAPI_NAMESPACE_INTERNAL_BEGIN
-
-using namespace llvm;
 
 /// Magic number for binary store files.
 const unsigned char SDKDB_SIGNATURE[] = {'S', 'D', 'K', 0xDB}; // NOLINT
