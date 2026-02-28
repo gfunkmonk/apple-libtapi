@@ -15,6 +15,7 @@
 #define TAPI_LINKER_INTERFACE_FILE_H
 
 #include <memory>
+#include <stdint.h>
 #include <string>
 #include <tapi/Defines.h>
 #include <vector>
